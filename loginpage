@@ -1,4 +1,47 @@
 <!DOCTYPE HTML>
+
+
+<?php
+
+
+function login()
+{
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', 'rs@420');
+define('DB_DATABASE','LibraryManagement');
+
+include("config.php");
+session_start();
+
+if($_SERVER["REQUEST_METHOD"]== "POST")
+{
+$myusername=mysqli_real_escape_string($db,$_POST['username']);
+$mypassword=mysqli_real_escape_string($db,$_POST['password;]);
+  
+
+
+$sql = "SELECT id FROM admin WHERE username = '$myusername' and passcode = '$mypassword'";
+      $result = mysqli_query($db,$sql);
+      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+      $active = $row['active'];
+      
+      $count = mysqli_num_rows($result);
+      
+    
+		
+      if($count == 1) {
+         session_register("myusername");
+         $_SESSION['login_user'] = $myusername;
+         
+         header("location: welcome.php");
+      }else {
+         $error = "Your Login Name or Password is invalid";
+      }
+   }
+}
+?>
+
 <html>
 <head>
 <style>
@@ -112,20 +155,18 @@ $('.message a').click(function(){
 </head>
 <body>
 
+ 
+
 <div class="login-page">
   <div class="form">
-    <form class="register-form">
-      <input type="text" placeholder="name"/>
-      <input type="password" placeholder="password"/>
-      <input type="text" placeholder="email address"/>
-      <button>create</button>
-      <p class="message">Already registered? <a href="#">Sign In</a></p>
-    </form>
-    <form class="login-form">
+
+
+
+<form class="login-form">
       <input type="text" placeholder="username"/>
       <input type="password" placeholder="password"/>
-      <button>login</button>
-      <p class="message">Not registered? <a href="#">Create an account</a></p>
+      <button >login</button>
+      <p class="message">Not registered? <a href="file:///var/www/html/databaseproject/registration.html">Create an account</a></p>
     </form>
   </div>
 </div>
